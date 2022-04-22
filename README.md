@@ -4,6 +4,7 @@
 
 Проект Mesto.
 Проект собран на React.
+
 ------
 
 # Getting Started with Create React App
