@@ -3,8 +3,7 @@ function ButtonSubmitForm({ popupName }) {
     <button
       className="popup__saved-btn"
       type="submit"
-      aria-label={`${popupName} button`}
-    >
+      aria-label={`${popupName} button`}>
       {popupName === 'delete-card' ? 'Да' : 'Сохранить'}
     </button>
   );

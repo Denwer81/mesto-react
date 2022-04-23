@@ -1,51 +1,107 @@
+import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import InputWithValidationMessege from './InputWithValidationMessege';
 import ImagePopup from './ImagePopup';
+import api from '../utils/Api';
 
 function App() {
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [cards, setCads] = React.useState([]);
+
   function handleEditAvatarClick() {
-    document.querySelector('.popup_type_change-avatar').classList.add('popup_opened');
+    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   }
 
   function handleEditProfileClick() {
-    document.querySelector('.popup_type_edit-profile').classList.add('popup_opened');
+    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
   }
 
   function handleAddPlaceClick() {
-    document.querySelector('.popup_type_add-card').classList.add('popup_opened');
+    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
   }
+
+  function handleCloseAllPopup() {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsImagePopupOpen(false);
+  }
+
+  function handleClosePopupOverlay(evt) {
+    if (evt.target === evt.currentTarget) {
+      handleCloseAllPopup();
+    }
+  }
+
+  React.useEffect(() => {
+    function handleEscapeKey(evt) {
+      if (evt.key === 'Escape') {
+        handleCloseAllPopup();
+      }
+    }
+    document.addEventListener('keydown', handleEscapeKey)
+    return () => document.removeEventListener('keydown', handleEscapeKey)
+  }, []);
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then(cardsData => {
+        const fomattedCardData = cardsData.map(cardData => {
+          return {
+            title: cardData.name,
+            link: cardData.link,
+            cardId: cardData._id,
+            likesCount: cardData.likes.length,
+            createByUserId: cardData.owner._id
+          }
+        });
+        setCads(fomattedCardData);
+      })
+  }, []);
 
   return (
     <div className="app">
+
       <div className="page__container">
         <Header />
         <Main
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
-        />
+          initialCards={cards} />
         <Footer />
       </div>
 
-      <PopupWithForm title="Редактировать профиль" popupName="edit-profile">
+      <PopupWithForm
+        title="Редактировать профиль"
+        popupName="edit-profile"
+        isOpen={isEditProfilePopupOpen}
+        setIsOpen={handleEditProfileClick}
+        closeByOverlay={handleClosePopupOverlay}>
         <InputWithValidationMessege
           popupName="edit-profile"
           type="text"
           name="UserName"
-          placeholder="Имя"
-        />
+          placeholder="Имя" />
         <InputWithValidationMessege
           popupName="edit-profile"
           type="text"
           name="UserAbout"
-          placeholder="Профессия"
-        />
+          placeholder="Профессия" />
       </PopupWithForm>
 
-      <PopupWithForm title="Обновить аватар" popupName="change-avatar">
+      <PopupWithForm
+        title="Обновить аватар"
+        popupName="change-avatar"
+        isOpen={isEditAvatarPopupOpen}
+        setIsOpen={handleEditAvatarClick}
+        closeByOverlay={handleClosePopupOverlay}>
         <InputWithValidationMessege
           popupName="change-avatar"
           type="url"
@@ -53,7 +109,12 @@ function App() {
           placeholder="Обновить аватар" />
       </PopupWithForm>
 
-      <PopupWithForm title="Новое Место" popupName="add-card">
+      <PopupWithForm
+        title="Новое Место"
+        popupName="add-card"
+        isOpen={isAddPlacePopupOpen}
+        setIsOpen={handleAddPlaceClick}
+        closeByOverlay={handleClosePopupOverlay}>
         <InputWithValidationMessege
           popupName="add-card"
           type="text"
@@ -68,21 +129,8 @@ function App() {
 
       <PopupWithForm title="Вы уверены?" popupName="delete-card" />
 
-      <ImagePopup />
-
-      <template className="card-template">
-        <li className="card">
-          <button className="card__delete-btn card__delete-btn_hidden" type="button" aria-label="удалить карточку"></button>
-          <img className="card__image" src="#" alt="#" loading="lazy" />
-          <div className="card__info">
-            <h2 className="card__title">temp</h2>
-            <div className="card__like-container">
-              <button className="card__like-btn" type="button" aria-label="лайк карточки"></button>
-              <p className="card__like-counter"></p>
-            </div>
-          </div>
-        </li>
-      </template>
+      <ImagePopup
+        closeByOverlay={handleClosePopupOverlay} />
 
     </div>
   );
