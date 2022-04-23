@@ -2,9 +2,7 @@ import React from 'react';
 import ButtonSubmitForm from "./ButtonSubmitForm";
 import ButtonClosePopup from "./ButtonClosePopup";
 
-
-
-function PopupWithForm({ title, popupName, children, isOpen, setIsOpen, closeByOverlay }) {
+function PopupWithForm({ title, popupName, children, isOpen, closePopup, closeByOverlay }) {
   return (
       <div className={`popup popup_type_${popupName} ${isOpen ? 'popup_opened' : ''}`}
         onMouseDown={(evt) => closeByOverlay(evt)}>
@@ -14,7 +12,7 @@ function PopupWithForm({ title, popupName, children, isOpen, setIsOpen, closeByO
             {children}
             <ButtonSubmitForm popupName={popupName} />
           </form>
-          <ButtonClosePopup setIsOpen={setIsOpen} />
+          <ButtonClosePopup closePopup={closePopup} />
         </div>
       </div>
   );

@@ -11,26 +11,40 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [cards, setCads] = React.useState([]);
+  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({ link: '', title: '' });
 
   function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+    setIsEditAvatarPopupOpen(true);
+    lockScroll()
   }
 
   function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+    setIsEditProfilePopupOpen(true);
+    lockScroll()
   }
 
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+    setIsAddPlacePopupOpen(true);
+    lockScroll()
   }
+
+  function handleCardClick(cardData) {
+    setSelectedCard(cardData);
+    setIsImagePopupOpen(true);
+    lockScroll()
+  } 
 
   function handleCloseAllPopup() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsImagePopupOpen(false);
+    setTimeout(() => {
+      setSelectedCard({ link: '', title: '' });
+    }, 300);
+    unlockScroll()
   }
 
   function handleClosePopupOverlay(evt) {
@@ -63,7 +77,22 @@ function App() {
         });
         setCads(fomattedCardData);
       })
+      .catch(err => console.log(err));
   }, []);
+
+  function lockScroll() {
+    const scrollBarSize = window.innerWidth - document.documentElement.clientWidth;
+  
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollBarSize}px`;
+  }
+  
+  function unlockScroll() {
+    setTimeout(() => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }, 300);
+  }
 
   return (
     <div className="app">
@@ -74,7 +103,9 @@ function App() {
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
-          initialCards={cards} />
+          initialCards={cards} 
+          onCardClick={handleCardClick}
+          />
         <Footer />
       </div>
 
@@ -82,7 +113,7 @@ function App() {
         title="Редактировать профиль"
         popupName="edit-profile"
         isOpen={isEditProfilePopupOpen}
-        setIsOpen={handleEditProfileClick}
+        closePopup={handleCloseAllPopup}
         closeByOverlay={handleClosePopupOverlay}>
         <InputWithValidationMessege
           popupName="edit-profile"
@@ -100,7 +131,7 @@ function App() {
         title="Обновить аватар"
         popupName="change-avatar"
         isOpen={isEditAvatarPopupOpen}
-        setIsOpen={handleEditAvatarClick}
+        closePopup={handleCloseAllPopup}
         closeByOverlay={handleClosePopupOverlay}>
         <InputWithValidationMessege
           popupName="change-avatar"
@@ -113,7 +144,7 @@ function App() {
         title="Новое Место"
         popupName="add-card"
         isOpen={isAddPlacePopupOpen}
-        setIsOpen={handleAddPlaceClick}
+        closePopup={handleCloseAllPopup}
         closeByOverlay={handleClosePopupOverlay}>
         <InputWithValidationMessege
           popupName="add-card"
@@ -130,6 +161,9 @@ function App() {
       <PopupWithForm title="Вы уверены?" popupName="delete-card" />
 
       <ImagePopup
+        isOpen={isImagePopupOpen}
+        card={selectedCard}
+        closePopup={handleCloseAllPopup}
         closeByOverlay={handleClosePopupOverlay} />
 
     </div>

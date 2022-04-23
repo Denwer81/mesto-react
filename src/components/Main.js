@@ -2,11 +2,11 @@ import React from 'react';
 import api from '../utils/Api'
 import Card from './card';
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards }) {
+function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards, onCardClick }) {
   const [userName, setUserName] = React.useState(null);
   const [userDescription, setuserDescription] = React.useState(null);
   const [userAvatar, setUserAvatar] = React.useState(null);
-  const [userId, setUserId] = React.useState(null);
+  // const [userId, setUserId] = React.useState(null);
 
   React.useEffect(() => {
     api.getProfile()
@@ -14,7 +14,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards }) {
         setUserName(usedData.name);
         setuserDescription(usedData.about);
         setUserAvatar(usedData.avatar);
-        setUserId(usedData._id);
+        // setUserId(usedData._id);
       })
       .catch(err => console.log(err));
   }, []);
@@ -52,7 +52,10 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards }) {
         <ul className="cards__list">
           {
             initialCards.map(data => (
-              <Card cardData={data} />
+              <Card
+                cardData={data}
+                onCardClick={onCardClick}
+                key={data.cardId} />
             ))
           }
         </ul>
