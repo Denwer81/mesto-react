@@ -34,9 +34,10 @@ function App() {
     setSelectedCard(cardData);
     setIsImagePopupOpen(true);
     lockScroll()
-  } 
+  }
 
-  function handleCloseAllPopup() {
+  const handleCloseAllPopup = React.useCallback(
+    () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -44,8 +45,9 @@ function App() {
     setTimeout(() => {
       setSelectedCard({ link: '', title: '' });
     }, 300);
-    unlockScroll()
-  }
+    unlockScroll();
+    }, []
+  )
 
   function handleClosePopupOverlay(evt) {
     if (evt.target === evt.currentTarget) {
@@ -55,13 +57,18 @@ function App() {
 
   React.useEffect(() => {
     function handleEscapeKey(evt) {
-      if (evt.key === 'Escape') {
+      if(evt.key === 'Escape') {
         handleCloseAllPopup();
       }
     }
-    document.addEventListener('keydown', handleEscapeKey)
-    return () => document.removeEventListener('keydown', handleEscapeKey)
-  }, []);
+
+    if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+      return () => {
+        document.removeEventListener('keydown', handleEscapeKey);
+      }
+    }
+  }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isImagePopupOpen, handleCloseAllPopup])
 
   React.useEffect(() => {
     api.getInitialCards()

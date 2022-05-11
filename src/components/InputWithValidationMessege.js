@@ -6,7 +6,8 @@ function InputWithValidationMessege({ popupName, type, name, placeholder }) {
         id={`${popupName}-${name}-input`}
         type={type}
         name={`${popupName}-${name}`}
-        placeholder={placeholder} required
+        placeholder={placeholder}
+        required
       />
       <span
         className="popup__error popup__error_hidden"
