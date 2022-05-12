@@ -1,23 +1,9 @@
 import React from 'react';
-import api from '../utils/Api'
+import CurrentUserContext from '../contexts/CurrentUserContext';
 import Card from './Card';
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards, onCardClick }) {
-  const [userName, setUserName] = React.useState(null);
-  const [userDescription, setuserDescription] = React.useState(null);
-  const [userAvatar, setUserAvatar] = React.useState(null);
-  // const [userId, setUserId] = React.useState(null);
-
-  React.useEffect(() => {
-    api.getProfile()
-      .then((usedData) => {
-        setUserName(usedData.name);
-        setuserDescription(usedData.about);
-        setUserAvatar(usedData.avatar);
-        // setUserId(usedData._id);
-      })
-      .catch(err => console.log(err));
-  }, []);
+function Main({ initialCards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, handleCardLike, handleDeleteCard }) {
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main className="main">
@@ -28,17 +14,17 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards, onCardCli
           onClick={onEditAvatar}
           type="button"
           aria-label="аватар"
-          style={{ backgroundImage: `url(${userAvatar})` }}>
+          style={{ backgroundImage: `url(${currentUser.avatar})` }}>
         </button>
         <div className="profile__info">
-          <h1 className="profile__user-name">{userName}</h1>
+          <h1 className="profile__user-name">{currentUser.name}</h1>
           <button
             className="profile__edit-btn"
             onClick={onEditProfile}
             type="button"
             aria-label="редактировать профиль">
           </button>
-          <p className="profile__text">{userDescription}</p>
+          <p className="profile__text">{currentUser.description}</p>
         </div>
         <button
           className="profile__add-card-btn"
@@ -55,6 +41,8 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, initialCards, onCardCli
               <Card
                 cardData={data}
                 onCardClick={onCardClick}
+                handleCardLike={handleCardLike}
+                handleDeleteCard={handleDeleteCard}
                 key={data.cardId} />
             ))
           }

@@ -1,6 +1,6 @@
 import ButtonClosePopup from "./ButtonClosePopup";
 
-function ImagePopup({ isOpen, card, closePopup, closeByOverlay }) {
+function ImagePopup({ card, isOpen, closePopup, closeByOverlay }) {
   return (
     <div className={`popup popup_type_image ${isOpen ? 'popup_opened' : ''}`}
         onMouseDown={(evt) => closeByOverlay(evt)}>
