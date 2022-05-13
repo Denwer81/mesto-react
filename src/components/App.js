@@ -45,7 +45,6 @@ function App() {
             link: cardData.link,
             cardId: cardData._id,
             likes: cardData.likes,
-            likesCount: cardData.likes.length,
             createByUserId: cardData.owner._id,
           }
         });
@@ -57,18 +56,8 @@ function App() {
   function handleCardLike(cardId, isLiked) {
     api.likesCard(cardId, isLiked)
       .then(newCardData => {
-        console.log(cards)
-        console.log(newCardData)
         setCards(cards => cards.map(card => card.cardId === cardId
-          ? newCardData
-          // ? {
-          //   title: newCardData.name,
-          //   link: newCardData.link,
-          //   cardId: newCardData._id,
-          //   likes: newCardData.likes,
-          //   likesCount: newCardData.likes.length,
-          //   createByUserId: newCardData.owner._id,
-          // }
+          ? { ...card, likes: newCardData.likes }
           : card));
       })
       .catch(err => console.log(err));
@@ -92,23 +81,22 @@ function App() {
   }
 
   function handleSubmitEditForm({ userName, userAbout }) {
-    console.log(userName,userAbout)
-    // evt.preventDefault();
-    // setIsLoading(true);
-    // api.editProfile(userData.userName, userData.userAbout)
-    //   .then(res => {
-    //     userInfo.setUserInfo({
-    //       userName: res.name,
-    //       userAbout: res.about,
-    //     });
-    //     handleCloseAllPopup();
-    //   })
-    //   .catch(err => console.log(err))
-    //   .finally(() => {
-    //     setTimeout(() => {
-    //       setIsLoading(false);;
-    //     }, 300);
-    //   })
+    console.log(currentUser)
+    // console.log(userName,userAbout)
+    setIsLoading(true);
+    api.editProfile(userName, userAbout)
+      .then(res => {
+        setCurrentUser({...currentUser, about: res.description})
+        console.log(res)
+        handleCloseAllPopup();
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        console.log(currentUser)
+        setTimeout(() => {
+          setIsLoading(false);;
+        }, 300);
+      })
   }
 
   function handleEditAvatarClick() {
@@ -201,17 +189,22 @@ function App() {
           isOpen={isEditProfilePopupOpen}
           closePopup={handleCloseAllPopup}
           closeByOverlay={handleClosePopupOverlay}
-          onSubmitForm={handleSubmitEditForm} />
+          onSubmitForm={handleSubmitEditForm}
+          isLoading={isLoading} />
 
         <ChangeAvatar
           isOpen={isEditAvatarPopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay} />
+          closeByOverlay={handleClosePopupOverlay}
+          // onSubmitForm={11}
+          isLoading={isLoading} />
 
         <AddCardPopup
           isOpen={isAddPlacePopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay} />
+          closeByOverlay={handleClosePopupOverlay}
+          // onSubmitForm={11}
+          isLoading={isLoading} />
 
         <DeleteCardPopup
           isOpen={isDeleteCardPopupOpen}
