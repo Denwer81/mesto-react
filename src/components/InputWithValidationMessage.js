@@ -1,4 +1,4 @@
-function InputWithValidationMessege({ popupName, type, name, placeholder }) {
+function InputWithValidationMessage({ popupName, type, name, placeholder, minLength, maxLength, value, onChangeInput }) {
   return (
     <>
       <input
@@ -7,7 +7,11 @@ function InputWithValidationMessege({ popupName, type, name, placeholder }) {
         type={type}
         name={`${popupName}-${name}`}
         placeholder={placeholder}
+        minLength={minLength}
+        maxLength={maxLength}
         required
+        value={value || ''}
+        onChange={(evt) => onChangeInput(evt.target.value)}
       />
       <span
         className="popup__error popup__error_hidden"
@@ -17,4 +21,4 @@ function InputWithValidationMessege({ popupName, type, name, placeholder }) {
   );
 }
 
-export default InputWithValidationMessege;
+export default InputWithValidationMessage;

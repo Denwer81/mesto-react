@@ -1,11 +1,10 @@
-function ButtonSubmitForm({ popupName, handleSubmitForm}) {
+function ButtonSubmitForm({ popupName, buttonText }) {
   return (
     <button
       className="popup__saved-btn"
-      onClick={(evt) => handleSubmitForm(evt)}
       type="submit"
       aria-label={`${popupName} button`}>
-      {popupName === 'delete-card' ? 'Да' : 'Сохранить'}
+      {buttonText}
     </button>
   );
 }

@@ -20,6 +20,7 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(false);
 
 
   React.useEffect(() => {
@@ -38,7 +39,7 @@ function App() {
   React.useEffect(() => {
     api.getInitialCards()
       .then(cardsData => {
-        const fomattedCardData = cardsData.map(cardData => {
+        const formattedCardData = cardsData.map(cardData => {
           return {
             title: cardData.name,
             link: cardData.link,
@@ -48,7 +49,7 @@ function App() {
             createByUserId: cardData.owner._id,
           }
         });
-        setCards(fomattedCardData);
+        setCards(formattedCardData);
       })
       .catch(err => console.log(err));
   }, []);
@@ -56,32 +57,59 @@ function App() {
   function handleCardLike(cardId, isLiked) {
     api.likesCard(cardId, isLiked)
       .then(newCardData => {
-        setCards(state => state.map(card => card.cardId === cardId
-          ? {
-            title: newCardData.name,
-            link: newCardData.link,
-            cardId: newCardData._id,
-            likes: newCardData.likes,
-            likesCount: newCardData.likes.length,
-            createByUserId: newCardData.owner._id,
-          }
+        console.log(cards)
+        console.log(newCardData)
+        setCards(cards => cards.map(card => card.cardId === cardId
+          ? newCardData
+          // ? {
+          //   title: newCardData.name,
+          //   link: newCardData.link,
+          //   cardId: newCardData._id,
+          //   likes: newCardData.likes,
+          //   likesCount: newCardData.likes.length,
+          //   createByUserId: newCardData.owner._id,
+          // }
           : card));
       })
       .catch(err => console.log(err));
   }
 
-  function handleSubmitDeleteForm(evt) {
-    evt.preventDefault();
+  function handleSubmitDeleteForm() {
+    setIsLoading(true);
     api.deleteCard(selectedCard.cardId)
       .then((cardDelete) => {
-        console.log(cardDelete)
-        setCards(state => state.filter(card => card.cardId !== selectedCard.cardId));
+        if (cardDelete) {
+          setCards(cards => cards.filter(card => card.cardId !== selectedCard.cardId));
+        };
         handleCloseAllPopup();
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);;
+        }, 300);
+      })
   }
 
-
+  function handleSubmitEditForm({ userName, userAbout }) {
+    console.log(userName,userAbout)
+    // evt.preventDefault();
+    // setIsLoading(true);
+    // api.editProfile(userData.userName, userData.userAbout)
+    //   .then(res => {
+    //     userInfo.setUserInfo({
+    //       userName: res.name,
+    //       userAbout: res.about,
+    //     });
+    //     handleCloseAllPopup();
+    //   })
+    //   .catch(err => console.log(err))
+    //   .finally(() => {
+    //     setTimeout(() => {
+    //       setIsLoading(false);;
+    //     }, 300);
+    //   })
+  }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -136,7 +164,6 @@ function App() {
         handleCloseAllPopup();
       }
     }
-
     if (isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen || isDeleteCardPopupOpen) {
       document.addEventListener('keydown', handleEscapeKey);
       return () => {
@@ -173,7 +200,8 @@ function App() {
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay} />
+          closeByOverlay={handleClosePopupOverlay}
+          onSubmitForm={handleSubmitEditForm} />
 
         <ChangeAvatar
           isOpen={isEditAvatarPopupOpen}
@@ -186,10 +214,11 @@ function App() {
           closeByOverlay={handleClosePopupOverlay} />
 
         <DeleteCardPopup
-          handleSubmitForm={handleSubmitDeleteForm}
           isOpen={isDeleteCardPopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay} />
+          closeByOverlay={handleClosePopupOverlay} 
+          onSubmitForm={handleSubmitDeleteForm}
+          isLoading={isLoading} />
 
         <ImagePopup
           card={selectedCard}

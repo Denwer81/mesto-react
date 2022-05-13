@@ -1,20 +1,21 @@
 import PopupWithForm from "./PopupWithForm";
+import ButtonSubmitForm from "./ButtonSubmitForm";
 
-function DeleteCardPopup({ isOpen, closePopup, closeByOverlay, handleSubmitForm }) {
-  // function handleSubmitForm(evt) {
-  //   evt.preventDefault();
-  //   console.log('delete')
-  // }
+function DeleteCardPopup({ isOpen, closePopup, closeByOverlay, onSubmitForm, isLoading }) {
+  const popupName = "delete-card";
 
   return (
     <PopupWithForm
       title="Вы уверены?"
-      popupName="delete-card"
+      popupName={popupName}
       isOpen={isOpen}
       closePopup={closePopup}
       closeByOverlay={closeByOverlay}
-      handleSubmitForm={handleSubmitForm}
-    />
+      onSubmitForm={onSubmitForm}>
+      <ButtonSubmitForm
+        popupName={popupName}
+        buttonText={isLoading ? 'Удаление...' : 'Да'} />
+    </PopupWithForm>
   )
 }
 

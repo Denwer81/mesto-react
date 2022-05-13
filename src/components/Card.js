@@ -27,7 +27,7 @@ function Card({ cardData, onCardClick, handleCardLike, handleDeleteCard }) {
             onClick={() => handleCardLike(cardData.cardId, isLikedByCurrentUser)}
             type="button"
             aria-label="лайк карточки"></button>
-          <p className="card__like-counter">{cardData.likesCount || 0}</p>
+          <p className="card__like-counter">{cardData.likes.length || 0}</p>
         </div>
       </div>
     </li>
