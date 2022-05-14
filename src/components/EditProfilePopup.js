@@ -21,10 +21,7 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
       popupName={popupName}
       isOpen={isOpen}
       closePopup={closePopup}
-      onSubmitForm={() => onSubmitForm({
-        userName: userName,
-        userAbout: userDescription
-      })}>
+      onSubmitForm={() => onSubmitForm(userName, userDescription)}>
       <input
         className={`popup__input popup__input_${popupName}`}
         id={`${popupName}-userName-input`}

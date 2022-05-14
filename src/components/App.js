@@ -54,9 +54,9 @@ function App() {
 
   function handleCardLike(cardId, isLiked) {
     api.likesCard(cardId, isLiked)
-      .then(newCardData => {
+      .then(data => {
         setCards(cards => cards.map(card => card.cardId === cardId
-          ? { ...card, likes: newCardData.likes }
+          ? { ...card, likes: data.likes }
           : card));
       })
       .catch(err => console.log(err));
@@ -65,8 +65,8 @@ function App() {
   function handleSubmitDeleteForm() {
     setIsLoading(true);
     api.deleteCard(selectedCard.cardId)
-      .then((cardDelete) => {
-        if (cardDelete) {
+      .then((data) => {
+        if (data) {
           setCards(cards => cards.filter(card => card.cardId !== selectedCard.cardId));
         };
         handleCloseAllPopup();
@@ -79,7 +79,7 @@ function App() {
       })
   }
 
-  function handleSubmitEditForm({ userName, userAbout }) {
+  function handleSubmitEditForm(userName, userAbout) {
     setIsLoading(true);
     api.editProfile(userName, userAbout)
       .then(data => {
@@ -89,7 +89,45 @@ function App() {
       .catch(err => console.log(err))
       .finally(() => {
         setTimeout(() => {
-          setIsLoading(false);;
+          setIsLoading(false);
+        }, 300);
+      })
+  }
+
+  function handleSubmitAvatarForm(link) {
+    setIsLoading(true);
+    api.changeAvatar(link)
+      .then(data => {
+        setCurrentUser({ ...currentUser, avatar: data.avatar })
+        handleCloseAllPopup();
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      })
+  }
+
+  function handleSubmitAddCardForm(name, link) {
+    setIsLoading(true);
+    api.addNewCard(name, link)
+      .then(data => {
+        const formattedCardData = {
+          title: data.name,
+          link: data.link,
+          cardId: data._id,
+          likes: data.likes,
+          createByUserId: data.owner._id,
+        };
+
+        setCards([formattedCardData, ...cards]);
+        handleCloseAllPopup();
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        setTimeout(() => {
+          setIsLoading(false);
         }, 300);
       })
   }
@@ -159,13 +197,13 @@ function App() {
         <ChangeAvatar
           isOpen={isEditAvatarPopupOpen}
           closePopup={handleCloseAllPopup}
-          // onSubmitForm={11}
+          onSubmitForm={handleSubmitAvatarForm}
           isLoading={isLoading} />
 
         <AddCardPopup
           isOpen={isAddPlacePopupOpen}
           closePopup={handleCloseAllPopup}
-          // onSubmitForm={11}
+          onSubmitForm={handleSubmitAddCardForm}
           isLoading={isLoading} />
 
         <DeleteCardPopup
