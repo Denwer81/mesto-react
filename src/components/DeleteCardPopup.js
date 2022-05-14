@@ -1,7 +1,7 @@
 import PopupWithForm from "./PopupWithForm";
 import ButtonSubmitForm from "./ButtonSubmitForm";
 
-function DeleteCardPopup({ isOpen, closePopup, closeByOverlay, onSubmitForm, isLoading }) {
+function DeleteCardPopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
   const popupName = "delete-card";
 
   return (
@@ -10,7 +10,6 @@ function DeleteCardPopup({ isOpen, closePopup, closeByOverlay, onSubmitForm, isL
       popupName={popupName}
       isOpen={isOpen}
       closePopup={closePopup}
-      closeByOverlay={closeByOverlay}
       onSubmitForm={onSubmitForm}>
       <ButtonSubmitForm
         popupName={popupName}

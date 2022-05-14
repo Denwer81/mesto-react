@@ -39,11 +39,11 @@ function Main({ initialCards, onEditProfile, onAddPlace, onEditAvatar, onCardCli
           {
             initialCards.map(data => (
               <Card
+                key={data.cardId}
                 cardData={data}
                 onCardClick={onCardClick}
                 handleCardLike={handleCardLike}
-                handleDeleteCard={handleDeleteCard}
-                key={data.cardId} />
+                handleDeleteCard={handleDeleteCard} />
             ))
           }
         </ul>

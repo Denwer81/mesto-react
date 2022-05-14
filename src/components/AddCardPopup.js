@@ -1,8 +1,7 @@
 import PopupWithForm from "./PopupWithForm";
-import InputWithValidationMessege from './InputWithValidationMessage';
 import ButtonSubmitForm from "./ButtonSubmitForm";
 
-function AddCardPopup({ isOpen, closePopup, closeByOverlay, onSubmitForm, isLoading }) {
+function AddCardPopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
   const popupName = "add-card";
 
   return (
@@ -11,9 +10,8 @@ function AddCardPopup({ isOpen, closePopup, closeByOverlay, onSubmitForm, isLoad
       popupName={popupName}
       isOpen={isOpen}
       closePopup={closePopup}
-      closeByOverlay={closeByOverlay}
       onSubmitForm={onSubmitForm}>
-      <InputWithValidationMessege
+      {/* <InputWithValidationMessege
         popupName={popupName}
         type="text"
         name="place"
@@ -24,7 +22,7 @@ function AddCardPopup({ isOpen, closePopup, closeByOverlay, onSubmitForm, isLoad
         popupName="add-card"
         type="url"
         name="url"
-        placeholder="Ссылка на картинку" />
+        placeholder="Ссылка на картинку" /> */}
        <ButtonSubmitForm
         popupName={popupName}
         buttonText={isLoading ? "Сохранение..." : "Сохранить"} />

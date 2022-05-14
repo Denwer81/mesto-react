@@ -22,7 +22,6 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
 
-
   React.useEffect(() => {
     api.getProfile()
       .then((userData) => {
@@ -81,18 +80,14 @@ function App() {
   }
 
   function handleSubmitEditForm({ userName, userAbout }) {
-    console.log(currentUser)
-    // console.log(userName,userAbout)
     setIsLoading(true);
     api.editProfile(userName, userAbout)
-      .then(res => {
-        setCurrentUser({...currentUser, about: res.description})
-        console.log(res)
+      .then(data => {
+        setCurrentUser({ ...currentUser, name: data.name, description: data.about })
         handleCloseAllPopup();
       })
       .catch(err => console.log(err))
       .finally(() => {
-        console.log(currentUser)
         setTimeout(() => {
           setIsLoading(false);;
         }, 300);
@@ -126,46 +121,17 @@ function App() {
     lockScroll();
   }
 
-  const handleCloseAllPopup = React.useCallback(
-    () => {
-      setIsEditProfilePopupOpen(false);
-      setIsAddPlacePopupOpen(false);
-      setIsEditAvatarPopupOpen(false);
-      setIsImagePopupOpen(false);
-      setIsDeleteCardPopupOpen(false);
-      setTimeout(() => {
-        setSelectedCard({});
-      }, 300);
-      unlockScroll();
-    }, []
-  )
-
-  function handleClosePopupOverlay(evt) {
-    if (evt.target === evt.currentTarget) {
-      handleCloseAllPopup();
-    }
+  function handleCloseAllPopup() {
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsImagePopupOpen(false);
+    setIsDeleteCardPopupOpen(false);
+    setTimeout(() => {
+      setSelectedCard({});
+    }, 300);
+    unlockScroll();
   }
-
-  React.useEffect(() => {
-    function handleEscapeKey(evt) {
-      if (evt.key === 'Escape') {
-        handleCloseAllPopup();
-      }
-    }
-    if (isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen || isDeleteCardPopupOpen) {
-      document.addEventListener('keydown', handleEscapeKey);
-      return () => {
-        document.removeEventListener('keydown', handleEscapeKey);
-      }
-    }
-  }, [
-    isEditAvatarPopupOpen,
-    isEditProfilePopupOpen,
-    isAddPlacePopupOpen,
-    isImagePopupOpen,
-    handleCloseAllPopup,
-    isDeleteCardPopupOpen
-  ])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -175,49 +141,43 @@ function App() {
           <Header />
           <Main
             initialCards={cards}
-            handleCardLike={handleCardLike}
             onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
+            onAddPlace={handleAddPlaceClick}
             onCardClick={handleCardClick}
-            handleDeleteCard={handleDeleteCard}
-          />
+            handleCardLike={handleCardLike}
+            handleDeleteCard={handleDeleteCard} />
           <Footer />
         </div>
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay}
           onSubmitForm={handleSubmitEditForm}
           isLoading={isLoading} />
 
         <ChangeAvatar
           isOpen={isEditAvatarPopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay}
           // onSubmitForm={11}
           isLoading={isLoading} />
 
         <AddCardPopup
           isOpen={isAddPlacePopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay}
           // onSubmitForm={11}
           isLoading={isLoading} />
 
         <DeleteCardPopup
           isOpen={isDeleteCardPopupOpen}
           closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay} 
           onSubmitForm={handleSubmitDeleteForm}
           isLoading={isLoading} />
 
         <ImagePopup
           card={selectedCard}
           isOpen={isImagePopupOpen}
-          closePopup={handleCloseAllPopup}
-          closeByOverlay={handleClosePopupOverlay} />
+          closePopup={handleCloseAllPopup} />
 
       </div>
     </CurrentUserContext.Provider>
