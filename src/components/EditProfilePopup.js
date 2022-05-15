@@ -12,7 +12,7 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading, handleI
   React.useEffect(() => {
     setUserName(currentUser.name);
     setUserDescription(currentUser.description);
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   function handleInputUserName(evt) {
     setUserName(evt.target.value);
@@ -40,7 +40,7 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading, handleI
         placeholder="Имя"
         minLength="2"
         maxLength="40"
-        defaultValue={userName || ''}
+        value={userName || ''}
         onChange={handleInputUserName} 
         required />
       <ErrorMessage popupName={popupName} inputData={inputData} name="userName" />
@@ -52,7 +52,7 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading, handleI
         placeholder="Профессия"
         minLength="2"
         maxLength="200"
-        defaultValue={userDescription || ''}
+        value={userDescription || ''}
         onChange={handleInputUserDescription} 
         required />
       <ErrorMessage popupName={popupName} inputData={inputData} name="userDescription" />

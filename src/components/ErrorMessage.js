@@ -1,4 +1,5 @@
 function ErrorMessage({ popupName, name, inputData }) {
+
   return (
     <span
       className='popup__error'

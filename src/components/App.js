@@ -168,6 +168,7 @@ function App() {
     setIsDeleteCardPopupOpen(false);
     setTimeout(() => {
       setSelectedCard({});
+      setinputData({});
     }, 300);
     unlockScroll();
   }

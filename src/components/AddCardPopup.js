@@ -6,12 +6,17 @@ function AddCardPopup({ isOpen, closePopup, onSubmitForm, isLoading, handleInput
   const popupName = "add-card";
   const inputPlace = React.useRef();
   const inputUrl = React.useRef();
-  
+
   function handleSubmitForm() {
     onSubmitForm(inputPlace.current.value, inputUrl.current.value)
-    inputPlace.current.value = '';
-    inputUrl.current.value = '';
   }
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputPlace.current.value = '';
+      inputUrl.current.value = '';
+    }, 300);
+  }, [isOpen])
 
   return (
     <PopupWithForm

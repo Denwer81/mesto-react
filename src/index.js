@@ -5,7 +5,7 @@ import './vendor/normalize.css';
 import './vendor/fonts.css';
 import './index.css';
 import App from './components/App';
-import reportWebVitals from './components/reportWebVitals';
+import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

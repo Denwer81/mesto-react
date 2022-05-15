@@ -3,12 +3,18 @@ import PopupWithForm from "./PopupWithForm";
 import ErrorMessage from "./ErrorMessage";
 
 function ChangeAvatar({ isOpen, closePopup, onSubmitForm, isLoading, handleInputData, inputData }) {
-  const inputAvatar = React.useRef();
   const popupName = "change-avatar";
+  const inputAvatar = React.useRef();
+
   function handleSubmitForm() {
     onSubmitForm(inputAvatar.current.value);
-    inputAvatar.current.value = '';
   }
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      inputAvatar.current.value = '';
+    }, 300);
+  }, [isOpen])
 
   return (
     <PopupWithForm
