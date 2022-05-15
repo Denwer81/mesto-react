@@ -21,6 +21,7 @@ function App() {
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
+  const [inputData, setinputData] = React.useState({});
 
   React.useEffect(() => {
     api.getProfile()
@@ -171,6 +172,10 @@ function App() {
     unlockScroll();
   }
 
+  function handleInputData(evt) {
+    setinputData({ ...inputData, [evt.target.name]: evt.target.validationMessage });
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
@@ -191,18 +196,24 @@ function App() {
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           closePopup={handleCloseAllPopup}
+          handleInputData={handleInputData}
+          inputData={inputData}
           onSubmitForm={handleSubmitEditForm}
           isLoading={isLoading} />
 
         <ChangeAvatar
           isOpen={isEditAvatarPopupOpen}
           closePopup={handleCloseAllPopup}
+          handleInputData={handleInputData}
+          inputData={inputData}
           onSubmitForm={handleSubmitAvatarForm}
           isLoading={isLoading} />
 
         <AddCardPopup
           isOpen={isAddPlacePopupOpen}
           closePopup={handleCloseAllPopup}
+          handleInputData={handleInputData}
+          inputData={inputData}
           onSubmitForm={handleSubmitAddCardForm}
           isLoading={isLoading} />
 

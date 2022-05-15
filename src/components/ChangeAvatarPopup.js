@@ -1,9 +1,8 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 import ErrorMessage from "./ErrorMessage";
-import ButtonSubmitForm from "./ButtonSubmitForm";
 
-function ChangeAvatar({ isOpen, closePopup, onSubmitForm, isLoading }) {
+function ChangeAvatar({ isOpen, closePopup, onSubmitForm, isLoading, handleInputData, inputData }) {
   const inputAvatar = React.useRef();
   const popupName = "change-avatar";
   function handleSubmitForm() {
@@ -16,22 +15,19 @@ function ChangeAvatar({ isOpen, closePopup, onSubmitForm, isLoading }) {
       title="Обновить аватар"
       popupName={popupName}
       isOpen={isOpen}
+      isLoading={isLoading}
       closePopup={closePopup}
       onSubmitForm={handleSubmitForm}>
       <input
         ref={inputAvatar}
+        onChange={handleInputData}
         className={`popup__input popup__input_${popupName}`}
-        id={`${popupName}-userDescription-input`}
+        id={`${popupName}-url-input`}
         type="url"
         name={`${popupName}-url`}
         placeholder="Обновить аватар"
         required />
-      <ErrorMessage
-        popupName={popupName}
-        name="userName" />
-      <ButtonSubmitForm
-        popupName={popupName}
-        buttonText={isLoading ? "Сохранение..." : "Сохранить"} />
+      <ErrorMessage popupName={popupName} inputData={inputData} name="url" />
     </PopupWithForm>
   )
 }

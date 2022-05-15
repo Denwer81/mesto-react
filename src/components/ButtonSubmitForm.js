@@ -1,9 +1,11 @@
-function ButtonSubmitForm({ popupName, buttonText }) {
+function ButtonSubmitForm({ popupName, buttonText, isValid }) {
   return (
     <button
-      className="popup__saved-btn"
+      className={`popup__saved-btn ${popupName === "delete-card"
+        ? '' : !isValid ? 'popup__saved-btn_disabled' : ''}`}
       type="submit"
-      aria-label={`${popupName} button`}>
+      aria-label={`${popupName}_button`}
+      disabled={popupName === "delete-card" ? false : isValid ? false : true}>
       {buttonText}
     </button>
   );

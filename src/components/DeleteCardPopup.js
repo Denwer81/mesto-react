@@ -1,5 +1,4 @@
 import PopupWithForm from "./PopupWithForm";
-import ButtonSubmitForm from "./ButtonSubmitForm";
 
 function DeleteCardPopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
   const popupName = "delete-card";
@@ -9,11 +8,9 @@ function DeleteCardPopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
       title="Вы уверены?"
       popupName={popupName}
       isOpen={isOpen}
+      isLoading={isLoading}
       closePopup={closePopup}
       onSubmitForm={onSubmitForm}>
-      <ButtonSubmitForm
-        popupName={popupName}
-        buttonText={isLoading ? 'Удаление...' : 'Да'} />
     </PopupWithForm>
   )
 }

@@ -1,8 +1,9 @@
-function ErrorMessage({ popupName, name }) {
+function ErrorMessage({ popupName, name, inputData }) {
   return (
     <span
-      className="popup__error popup__error_hidden"
+      className='popup__error'
       id={`${popupName}-${name}-input-error`}>
+      {inputData[`${popupName}-${name}`]}
     </span>
   )
 }

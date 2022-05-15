@@ -2,9 +2,8 @@ import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 import ErrorMessage from "./ErrorMessage";
-import ButtonSubmitForm from "./ButtonSubmitForm";
 
-function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
+function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading, handleInputData, inputData }) {
   const [userName, setUserName] = React.useState();
   const [userDescription, setUserDescription] = React.useState();
   const currentUser = React.useContext(CurrentUserContext);
@@ -15,12 +14,23 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
     setUserDescription(currentUser.description);
   }, [currentUser]);
 
+  function handleInputUserName(evt) {
+    setUserName(evt.target.value);
+    handleInputData(evt);
+  }
+
+  function handleInputUserDescription(evt) {
+    setUserDescription(evt.target.value);
+    handleInputData(evt);
+  }
+
   return (
     <PopupWithForm
       title="Редактировать профиль"
       popupName={popupName}
       isOpen={isOpen}
       closePopup={closePopup}
+      isLoading={isLoading}
       onSubmitForm={() => onSubmitForm(userName, userDescription)}>
       <input
         className={`popup__input popup__input_${popupName}`}
@@ -31,9 +41,9 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
         minLength="2"
         maxLength="40"
         defaultValue={userName || ''}
-        onChange={(evt) => setUserName(evt.target.value)} 
+        onChange={handleInputUserName} 
         required />
-      <ErrorMessage popupName={popupName} name="userName" />
+      <ErrorMessage popupName={popupName} inputData={inputData} name="userName" />
       <input
         className={`popup__input popup__input_${popupName}`}
         id={`${popupName}-userDescription-input`}
@@ -43,13 +53,9 @@ function EditProfilePopup({ isOpen, closePopup, onSubmitForm, isLoading }) {
         minLength="2"
         maxLength="200"
         defaultValue={userDescription || ''}
-        onChange={(evt) => setUserDescription(evt.target.value)} 
+        onChange={handleInputUserDescription} 
         required />
-      <ErrorMessage
-        popupName={popupName} name="userName" />
-      <ButtonSubmitForm
-        popupName={popupName} buttonText={isLoading ? "Сохранение..." : "Сохранить"} />
-      
+      <ErrorMessage popupName={popupName} inputData={inputData} name="userDescription" />
     </PopupWithForm>
   )
 }
