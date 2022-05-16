@@ -12,10 +12,12 @@ function AddCardPopup({ isOpen, closePopup, onSubmitForm, isLoading, handleInput
   }
 
   React.useEffect(() => {
-    setTimeout(() => {
-      inputPlace.current.value = '';
-      inputUrl.current.value = '';
-    }, 300);
+    if (isOpen) {
+      setTimeout(() => {
+        inputPlace.current.value = '';
+        inputUrl.current.value = '';
+      }, 300);
+    }
   }, [isOpen])
 
   return (

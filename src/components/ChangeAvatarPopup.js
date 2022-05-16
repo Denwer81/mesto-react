@@ -11,9 +11,11 @@ function ChangeAvatar({ isOpen, closePopup, onSubmitForm, isLoading, handleInput
   }
 
   React.useEffect(() => {
-    setTimeout(() => {
-      inputAvatar.current.value = '';
-    }, 300);
+    if (isOpen) {
+      setTimeout(() => {
+        inputAvatar.current.value = '';
+      }, 300)
+    }
   }, [isOpen])
 
   return (
